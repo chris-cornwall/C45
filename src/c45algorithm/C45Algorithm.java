@@ -33,24 +33,10 @@ public class C45Algorithm {
         ArrayList<ArrayList<String>> csv = read(file);
 
         //Get classifier
-        csv.get(4).remove(0);
+        csv.get(numRows - 1).remove(0);
         ArrayList<String> classifiers = new ArrayList();
-        classifiers = csv.get(4);
-        
-//        ArrayList<String> uniqueClass = getClassifiers(classifiers);
-//        for(int i=0; i<uniqueClass.size(); i++){
-//            System.out.println("---------------------");
-//            System.out.println(uniqueClass.get(i));
-//        }
-
-        //Convert attribute values from strings to doubles
-        ArrayList<Double> attrib1 = convertToDouble(csv.get(0));
-        ArrayList<Double> attrib2 = convertToDouble(csv.get(1));
-        ArrayList<Double> attrib3 = convertToDouble(csv.get(2));
-        ArrayList<Double> attrib4 = convertToDouble(csv.get(3));
-
-        ArrayList<ArrayList<Double>> allAttribs = new ArrayList();
-        allAttribs.addAll(Arrays.asList(attrib1, attrib2, attrib3, attrib4));
+        classifiers = csv.get(numRows -1);
+        ArrayList<ArrayList<Double>> allAttribs = convertToDoubles(csv);
         
        
          //All test code.. Delete away!
@@ -58,20 +44,38 @@ public class C45Algorithm {
         SubSet original = new SubSet(allAttribs, classifiers);
         int[] infoGain1 = calcInfoGain(original);
 
-        System.out.println("------------------------SPLIT1----------------------------");
-        ArrayList<SubSet> split1 =  split(original, infoGain1[0], infoGain1[1]);
-        System.out.println("------------------------SPLIT2----------------------------");
-        int[] infoGain2 = calcInfoGain(split1.get(1));
-        ArrayList<SubSet> split2 =  split(split1.get(1), infoGain2[0], infoGain2[1]);
-        System.out.println("------------------------SPLIT3----------------------------");
-        int[] infoGain3 = calcInfoGain(split2.get(0));
-        ArrayList<SubSet> split3 =  split(split2.get(0), infoGain3[0], infoGain3[1]);
-        System.out.println("------------------------SPLIT4----------------------------");
-        int[] infoGain4 = calcInfoGain(split3.get(1));
-        ArrayList<SubSet> split4 =  split(split3.get(1), infoGain4[0], infoGain4[1]);
-
+       // System.out.println("------------------------SPLIT1----------------------------");
+      //  ArrayList<SubSet> split1 =  split(original, infoGain1[0], infoGain1[1]);
+        
+     //   if (finishedSplitting(split1.get(0)))
+     //       System.out.println("DONE!!");
+     //   System.out.println("------------------------SPLIT2----------------------------");
+//        int[] infoGain2 = calcInfoGain(split1.get(1));
+//        ArrayList<SubSet> split2 =  split(split1.get(1), infoGain2[0], infoGain2[1]);
+//        System.out.println("------------------------SPLIT3----------------------------");
+//        int[] infoGain3 = calcInfoGain(split2.get(0));
+//        ArrayList<SubSet> split3 =  split(split2.get(0), infoGain3[0], infoGain3[1]);
+//        System.out.println("------------------------SPLIT4----------------------------");
+//        int[] infoGain4 = calcInfoGain(split3.get(1));
+//        ArrayList<SubSet> split4 =  split(split3.get(1), infoGain4[0], infoGain4[1]);
 
     
+    }
+    
+    
+    //Returns the values for an attribute as doubles without the headings
+    public static ArrayList<ArrayList<Double>> convertToDoubles(ArrayList<ArrayList<String>> stringArray) {
+        
+        ArrayList<ArrayList<Double>> doubleArray = new ArrayList();
+        for (int i=0; i<stringArray.size()-1; i++){
+            ArrayList<Double> attrib = new ArrayList();
+            doubleArray.add(attrib);
+            for (int j = 1; j < stringArray.get(i).size(); j++) {
+                double d = Double.parseDouble(stringArray.get(i).get(j));
+                doubleArray.get(i).add(d);
+            }
+        }
+        return doubleArray;
     }
     
     public static void createTree(String name, Double val, Node left, Node right){
@@ -94,34 +98,23 @@ public class C45Algorithm {
     
     public static ArrayList<SubSet> split(SubSet subset, int attribPos, int instPos){
         
-        //Need to create these arrays using a loop6
+        System.out.println("HOWHWHEHEEH");
+        
+       //Need to create these arrays using a loop6
        ArrayList<String> classifiers = subset.getClassifiers(); 
        ArrayList<ArrayList<Double>> allAttribs = subset.getAttribs();
        ArrayList<Double> targetAttrib = subset.getAttribs().get(attribPos);
-       ArrayList<Double> attrib1 = new ArrayList();
-       ArrayList<Double> attrib2 = new ArrayList();
-       ArrayList<Double> attrib3 = new ArrayList();
-       ArrayList<Double> attrib4 = new ArrayList();
-       ArrayList<Double> attrib1r = new ArrayList();
-       ArrayList<Double> attrib2r = new ArrayList();
-       ArrayList<Double> attrib3r = new ArrayList();
-       ArrayList<Double> attrib4r = new ArrayList();
-       ArrayList<String> leftClassArray = new ArrayList();
-       ArrayList<String> rightClassArray = new ArrayList();
        ArrayList<ArrayList<Double>> leftAttribsArray = new ArrayList();
        ArrayList<ArrayList<Double>> rightAttribsArray = new ArrayList();
-     
-     //REALLY NEED TO CHANGE THIS PART.... Add loop to create arrays based on number of attribs
-          leftAttribsArray.add(attrib1);
-          leftAttribsArray.add(attrib2);
-          leftAttribsArray.add(attrib3);
-          leftAttribsArray.add(attrib4);
-          
-          rightAttribsArray.add(attrib1r);
-          rightAttribsArray.add(attrib2r);
-          rightAttribsArray.add(attrib3r);
-          rightAttribsArray.add(attrib4r);
-           
+       ArrayList<String> leftClassArray = new ArrayList();
+       ArrayList<String> rightClassArray = new ArrayList();
+       
+       for (int i=0; i<allAttribs.size(); i++){
+            ArrayList<Double> attrib = new ArrayList();
+            leftAttribsArray.add(attrib);
+            ArrayList<Double> attrib1 = new ArrayList();
+            rightAttribsArray.add(attrib1);
+        }
 
        System.out.println("TARGET = " + targetAttrib.get(instPos));
        for (int j=0; j<targetAttrib.size(); j++){
@@ -150,7 +143,7 @@ public class C45Algorithm {
        subsetArray.add(1, rightSub);
        
        
-       
+//       
        //Some testing code
        System.out.println("---------- LEFT ---------");
        leftSub.printSubSet();
@@ -158,6 +151,24 @@ public class C45Algorithm {
        rightSub.printSubSet();
        
        System.out.println("right class array size = " + rightClassArray.size());
+       
+        if (!finishedSplitting(leftSub)) {
+            System.out.println("---------- LEFT ---------");
+            leftSub.printSubSet();
+            calcInfoGain(leftSub);
+        }
+       
+        if (!finishedSplitting(rightSub)) {
+                     System.out.println("---------- RIGHT ---------");
+            rightSub.printSubSet();
+            calcInfoGain(rightSub);     
+        }
+       
+           //Some testing code
+           
+              
+       
+   
         return subsetArray;
     }
 
@@ -187,17 +198,15 @@ public class C45Algorithm {
             ArrayList<Double> attrib = attribs.get(attribPos);
             
             // Count the number of instances of a certain class
-           int class1Count = countClassifiers(classifier1, target);
+   
 
             for (int i = 0; i < attrib.size(); i++) {
                 
                // setClassifiers(target, i);
                 ArrayList<String> classifierArray = setClassifiers(target, i);
-//                classifier1 = classifierArray.get(0);
-//                classifier2 = classifierArray.get(1);
-//                classifier3 = classifierArray.get(2);
-//                
-               // System.out.println("C1" + classifier1 + "C2" + classifier2 + "C3" + classifier3);
+                int class1Count = countClassifiers(classifier1, target);
+           //System.out.println(class1Count);
+
                 Double threshold = attrib.get(i);
                 denom1 = 0;
                 denom2 = 0;
@@ -232,10 +241,11 @@ public class C45Algorithm {
                     attribPosInstancePos [0] = attribPos;
                     attribPosInstancePos [1] = i;
                     //Test code... DELETE
-                    // System.out.println("Lowest Entropy = " + lowestEnt);
+                    System.out.println("Here we are!");
                     System.out.println("Attrib Position =" + attribPos);
                     System.out.println("Lowest Entropy Position = " + i );
-                    //return attribPosInstancePos;
+                     ArrayList<SubSet> split1 =  split(subSet,  attribPosInstancePos[0],  attribPosInstancePos[1]);
+                    return attribPosInstancePos;
                 }
                 //If some number perfectly splits the data
                 if (denom2 == 0) {
@@ -286,89 +296,47 @@ public class C45Algorithm {
         }
 
          System.out.println("*****ARRAY********");
-         System.out.println("Attrib Position =" + attribPosInstancePos[0]);
+         System.out.println("Attrib  Position =" + attribPosInstancePos[0]);
          System.out.println("Lowest Entropy Position = " + attribPosInstancePos[1]);
          
+         ArrayList<SubSet> split1 =  split(subSet,  attribPosInstancePos[0],  attribPosInstancePos[1]);
            
         return attribPosInstancePos;
     }
     //   }    
 
-    //Returns the values for an attribute as doubles without the headings
-    public static ArrayList<Double> convertToDouble(ArrayList<String> stringArray) {
-        ArrayList<Double> doubleArray = new ArrayList();
-        for (int i = 1; i < stringArray.size(); i++) {
-
-            double f = Double.parseDouble(stringArray.get(i));
-            doubleArray.add(f);
-            //System.out.println(floatArray.get(i-1));
+    public static boolean finishedSplitting (SubSet subSet){
+        ArrayList<String> classifiers = subSet.getClassifiers();
+        String checker = classifiers.get(0);
+        boolean flag = true;
+        
+        for (int i=0; i<classifiers.size(); i++){
+            if (!(classifiers.get(i).equals(checker)))
+                return false;
         }
+        return true;
 
-        return doubleArray;
-    }
-    
-  
-  
+    }  
     public static ArrayList<String> setClassifiers(ArrayList<String> classifiers, int pos) {
         Set<String> uniqueSet = new HashSet<String>(classifiers);
         Object [] uniqueArray = uniqueSet.toArray();
         ArrayList<String> classifierArray = new ArrayList();
         classifier1 = classifiers.get(pos);
+        Object removeString = classifier1;
+        uniqueSet.remove(removeString);
         
-        for (int i=0; i<uniqueArray.length; i++){ 
-            if (!(uniqueArray[i].toString().matches(classifier1))){
-                classifierArray.add(uniqueArray[i].toString());   
-            }
-        } 
-        classifier2 = classifierArray.get(0);
-        if (classifierArray.size()>=3){
-        classifier3 = classifierArray.get(1);
+ 
+        if (uniqueSet.size() >= 1){
+            classifier2 = uniqueArray[0].toString();
+        //classifier2 = classifierArray.get(0);
         }
-       // classifierArray.add(0, classifier1);
-        
-//        
-//        for (int i=0; i<classifierArray.size(); i++){
-//            System.out.println(classifierArray.get(i));
-//        }
+        if (uniqueSet.size()>=2){
+            classifier3 = uniqueArray[1].toString();
+        }
         
         
-//         
-//            if (classifiers.get(pos).equals("LongEaredOwl")){
-//                classifier1 = "LongEaredOwl";
-//                classifier2 = "BarnOwl";
-//                classifier3 = "SnowyOwl";
-//            }
-//            else if (classifiers.get(pos).equals("BarnOwl")){
-//                classifier1 = "BarnOwl";
-//                classifier2 = "LongEaredOwl";
-//                classifier3 = "SnowyOwl";
-//            }    
-//         
-//            else{
-//                classifier1 = "SnowyOwl";
-//                classifier2 = "BarnOwl";
-//                classifier3 = "LongEaredOwl";
-//            }
-// 
-//            
-//            if (classifiers.get(pos).equals(uniqueArray[i].toString())){
-//                classifier1 = uniqueArray[i].toString();
-//                classifier2 = uniqueArray[i].toString();
-//                classifier3 = uniqueArray[i].toString();
-//            }
-//            else if (classifiers.get(pos).equals(uniqueArray[i+1])){
-//                classifier1 = uniqueArray[i+1].toString();
-//                classifier2 = uniqueArray[i].toString();
-//                classifier3 = uniqueArray[i+1].toString();
-//            }    
-//         
-//            else{
-//                classifier1 = uniqueArray[i+2].toString();
-//                classifier2 = uniqueArray[i+1].toString();
-//                classifier3 = uniqueArray[i].toString();
-//            }
     
-return classifierArray;
+    return classifierArray;
 
     }
 

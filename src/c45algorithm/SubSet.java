@@ -22,10 +22,10 @@ public class SubSet {
     
     public void printSubSet(){
 //        for (int i=0; i<attribs.size(); i++){
-            System.out.println("Attrib" + (4));
-            for (int j=0; j<attribs.get(3).size(); j++){
-                System.out.println(attribs.get(3).get(j) + "-" + classifier.get(j));
-            //}
+            for (int j=0; j<attribs.get(2).size(); j++){
+                System.out.println(attribs.get(2).get(j) + "-" + classifier.get(j));
+//            }
+           
         }
     }
 
